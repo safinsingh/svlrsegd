@@ -41,19 +41,21 @@ def main():
     alpha = 1e-2
     # meow
     epsilon = 1e-6
-    w = 0
-    b = 0
 
-    sse_prev = 0
+    w, b = gradient_descent(x_train, y_train, 0, 0, alpha)
+    sse = sum_squared_error(x_train, y_train, w, b)
+    sse_prev = sse
+
     for i in range(steps):
         w, b = gradient_descent(x_train, y_train, w, b, alpha)
         sse = sum_squared_error(x_train, y_train, w, b)
-        sse_diff = sse_prev - sse
-        sse_prev = sse
+        sse_diff = abs(sse - sse_prev)
 
-        print(f"step {i}:	y={w}x+{b}	sse={sse}	sse_diff={sse_diff}")
-        if i != 0 and sse_diff < epsilon:
+        print(f"step {i}:   y={w}x+{b} | sse={sse} | sse_diff={sse_diff}")
+        if sse_diff < epsilon:
             break
+
+        sse_prev = sse
 
     print(f"optimal linear regression line: y={w}x+{b}")
 
